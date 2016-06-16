@@ -10,6 +10,7 @@ var Game = function(io, hash, minPlayers) {
   this.started = !minPlayers;
   this.hinted = null;
   this.winner = null;
+  this.lastEvent = Date.now();
 
   this.reset();
 }
@@ -31,6 +32,7 @@ Game.prototype.reset = function() {
   for (var i = 0; i < 12; i++) {
     this.board.push(this.deck.pop());
   }
+  this.lastEvent = Date.now();
 }
 
 Game.prototype.getActivePlayers = function() {
@@ -199,7 +201,13 @@ Game.prototype.take = function(player, selected) {
       }, this);
       this.board.splice(lastRow, 3);
     }
-    this.players[player].score += (this.started ? 3 : 0);
+    var ts = Date.now();
+    if (this.started) {
+        this.players[player].score += 3;
+        this.players[player].sets.push(ts - this.lastEvent);
+	      this.sendMsg({event: true, msg: "Player " + (player+1) + " time: " + this.players[player].sets});
+    }
+    this.lastEvent = ts;
 
     if (this.winner === null ||
         !this.players[this.winner].online ||
@@ -220,10 +228,30 @@ Game.prototype.take = function(player, selected) {
     if (this.deck.length === 0 && !this.checkSetExistence()) {
       var winner = this.winner;
       var self = this;
-      setTimeout(function() { self.broadcast('win', winner); }, 2000);
+      var msgs = [];
+      for (var i = 0; i < this.players.length; i++) {
+        var player = this.players[i];
+        if (player === null) continue;
+        var totalTime = player.sets.reduce(function(a,b){return a+b;});
+        var avgTime = Math.floor(totalTime / player.sets.length);
+        var msg = '<b><u>Player ' + (i + 1) + ' statistics:</u></b><br>' +
+                  '<b>Score:</b> ' + player.sets.length + ' sets<br>' + 
+                  '<b>Fastest set:</b> ' + (Math.min.apply(Math, player.sets)/1000) + 's<br>' + 
+                  '<b>Average set:</b> ' + (avgTime/1000) + 's<br>' + 
+                  '<b>Incorrect sets:</b> ' + player.misclicks;
+        msgs.push(msg);
+      };
+
+      setTimeout(function() { 
+        self.broadcast('win', winner); 
+        msgs.forEach( function(msg) {
+          self.sendMsg({event: true, msg: msg});
+        })
+      }, 2000);
       this.reset();
     }
   } else {
+    this.players[player].misclicks += 1;
     console.log('take set failed');
   }
 }
@@ -244,6 +272,7 @@ Game.prototype.hint = function(player) {
         var newCards = [];
         for (var i = 0; i < 3; i++) newCards.push(self.deck.pop());
         self.board = self.board.concat(newCards);
+        self.lastEvent = Date.now();
         self.broadcast('add', newCards);
       }
     }
@@ -314,6 +343,8 @@ function Player(socket, sess) {
   this.score = 0;
   this.sess = sess;
   this.online = true;
+  this.sets = [];
+  this.misclicks = 0;
 }
 
 //+ Jonas Raoni Soares Silva
@@ -325,6 +356,11 @@ function shuffle(v){
     ;
     return v;
 };
+
+//@ http://stackoverflow.com/questions/221294/how-do-you-get-a-timestamp-in-javascript
+if (!Date.now) {
+    Date.now = function() { return new Date().getTime(); }
+}
 
 // **************************************************************************
 // Copyright 2007 - 2009 Tavs Dokkedahl
