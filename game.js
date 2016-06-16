@@ -205,7 +205,6 @@ Game.prototype.take = function(player, selected) {
     if (this.started) {
         this.players[player].score += 3;
         this.players[player].sets.push(ts - this.lastEvent);
-	      this.sendMsg({event: true, msg: "Player " + (player+1) + " time: " + this.players[player].sets});
     }
     this.lastEvent = ts;
 
