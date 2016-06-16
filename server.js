@@ -86,7 +86,7 @@ function getLatestPublicGame() {
     !(latestPublicGame.hash in games))
   {
     var hash = getUnusedHash();
-    latestPublicGame = games[hash] = new Game(io, hash, 3);
+    latestPublicGame = games[hash] = new Game(io, hash, 2);
   }
   return latestPublicGame;
 }
