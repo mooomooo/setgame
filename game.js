@@ -242,10 +242,10 @@ Game.prototype.take = function(player, selected) {
       };
 
       setTimeout(function() { 
-        self.broadcast('win', winner); 
         msgs.forEach( function(msg) {
           self.sendMsg({event: true, msg: msg});
         })
+        self.broadcast('win', winner); 
       }, 2000);
       this.reset();
     }
