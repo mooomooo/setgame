@@ -36,7 +36,7 @@ function startGame() {
 
   $('#hint').click(requestHint);
   $('#input').keydown(input);
-  $('#input').focus();
+  //$('#input').focus();
   
   $(window).hashchange(function() {
     if (preventRefresh) {
@@ -45,6 +45,8 @@ function startGame() {
     }
 	  location.reload();
   });
+
+  $(document).bind('touchmove', function(e){ e.preventDefault(); });
 
   $(document).bind('mousedown', function(event) {
     var target = $(event.target)
@@ -70,7 +72,7 @@ function startGame() {
   $(document).bind('mouseup', function(event) {
     setTimeout(function() {
       if (getSelText() == '') {
-        $('#input').focus();
+        //$('#input').focus();
       }
     }, 1000);
   });
@@ -114,8 +116,9 @@ function addCards(newCards) {
     var td = $('<td/>');
     var c = $('<div/>', {
       'class': 'card',
-      mousedown: function() { select(this) }
+      mousedown: function(event) { event.stopPropagation(); event.preventDefault(); select(this) }
     });
+    c.bind('touchstart', function(event) { event.stopPropagation(); event.preventDefault(); select(this) });
     c.append(generateShapes(card));
     cards.push(c);
     var w = $('<div class="cardwrap"></div>');
