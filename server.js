@@ -53,7 +53,7 @@ server = connect.createServer(
     })
 );
 
-server.listen(prod ? 80 : 8000);
+server.listen(8000);
 
 io = io.listen(server);
 io.configure('production', function() {
