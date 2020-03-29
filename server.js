@@ -56,6 +56,7 @@ io.configure('production', function() {
   io.enable('browser client etag');          // apply etag caching logic based on version number
   io.enable('browser client gzip');          // gzip the file
   io.set('log level', 1);                    // reduce logging
+  /*
   io.set('transports', [                     // enable all transports (optional if you want flashsocket)
       'websocket'
     , 'flashsocket'
@@ -63,6 +64,7 @@ io.configure('production', function() {
     , 'xhr-polling'
     , 'jsonp-polling'
   ]);
+  */
 });
 
 function getUnusedHash() {
