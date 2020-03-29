@@ -1,10 +1,9 @@
 var http = require('http')
   , fs = require('fs')
   , io = require('socket.io')
+  , servestatic = require('serve-static')
   , connect = require('connect')
-  , gzip = require('gzippo')
   , nowww = require('connect-no-www')
-  , ams = require('ams')
   , Game = require('./game')
   , server
   , games = {}
@@ -13,8 +12,6 @@ var http = require('http')
   , publicDir = __dirname + '/public'
   , depsDir = __dirname + '/deps'
   , prod = process.env.NODE_ENV === 'production';
-
-buildStaticFiles();
 
 function niceifyURL(req, res, next){
   if (/^\/game\/public/.exec(req.url)) {
@@ -43,11 +40,11 @@ server = connect.createServer(
     connect.logger(':status :remote-addr :url in :response-timems')
   , nowww()
   , niceifyURL
-  , gzip.staticGzip(publicDir, {
+  , servestatic(publicDir, {
         matchType: /text|javascript/
       , maxAge: prod ? 86400000 : 0
     })
-  , gzip.staticGzip(publicDir + '/perm', {
+  , servestatic(publicDir + '/perm', {
         matchType: /image|font/
       , maxAge: prod ? 604800000 : 0
     })
@@ -120,32 +117,4 @@ function randString(size) {
     ret += CHARSET[Math.floor(Math.random() * CHARSET.length)];
   }
   return ret;
-}
-
-function buildStaticFiles() {
-  var options = {
-    uglifyjs: prod,
-    jstransport: false,
-    cssabspath: false,
-    cssdataimg: false,
-    texttransport: false
-  };
-  ams.build
-    .create(publicDir)
-    .add(depsDir + '/JSON-js/json2.js')
-    .add(clientDir + '/util.js')
-    .add(depsDir + '/jquery-bbq/jquery.ba-bbq.js')
-    .add(depsDir + '/jquery.transform.js/jquery.transform.light.js')
-    .add(clientDir + '/client.js')
-    .combine({js: 'client.js'})
-    .process(options)
-    .write(publicDir)
-  .end();
-  ams.build
-    .create(publicDir)
-    .add(clientDir + '/style.css')
-    .add(depsDir + '/headjs/src/load.js')
-    .process(options)
-    .write(publicDir)
-  .end()
 }
