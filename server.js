@@ -8,9 +8,7 @@ var http = require('http')
   , server
   , games = {}
   , latestPublicGame
-  , clientDir = __dirname + '/client'
   , publicDir = __dirname + '/public'
-  , depsDir = __dirname + '/deps'
   , prod = process.env.NODE_ENV === 'production';
 
 function niceifyURL(req, res, next){
