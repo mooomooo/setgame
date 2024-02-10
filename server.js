@@ -7,8 +7,6 @@ var http = require('http')
   , server
   , games = {}
   , latestPublicGame
-  , publicDir = __dirname + '/public'
-  , prod = process.env.NODE_ENV === 'production';
 
 function niceifyURL(req, res, next){
   if (/^\/game\/public/.exec(req.url)) {
@@ -42,7 +40,7 @@ var app = express()
             .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
 server = http.createServer(app)
 
-server.listen(8000);
+server.listen(process.env.NODE_PORT || 8000);
 
 io = io.listen(server);
 io.configure('production', function() {
