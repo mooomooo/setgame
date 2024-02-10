@@ -324,17 +324,16 @@ function taken(newBoard) {
         , offsy = yconst + p.offset().top - dupe.offset().top;
       dupe.removeClass('selected');
       dupe.css('z-index', '3');
-      dupe.animate({
+      dupe.css({
+          transition: "transform 1s",
           transform: 'translateX(' + offsx + 'px) translateY(' + offsy + 'px) rotate(450deg) scale(0.45)'}
-        , { duration: 1000
-          , easing: 'easeOutQuad'
-          , complete: function() {
-              $(this).css('transform', 'translateX(0px) translateY(0px) rotate(90deg) scale(0.45)');
-              $(this).css('left', xconst);
-              $(this).css('top', yconst);
-              $(this).appendTo(p);
-            }
-      });
+      )
+      setTimeout( function() {
+          dupe.css('transform', 'translateX(0px) translateY(0px) rotate(90deg) scale(0.45)');
+          dupe.css('left', xconst);
+          dupe.css('top', yconst);
+          dupe.appendTo(p);
+      }, 1000);
     })(j++);
     lastSets[newBoard.player].push(dupe);
   }
