@@ -118,6 +118,7 @@ function addCards(newCards) {
       'class': 'card',
       mousedown: function(event) { event.stopPropagation(); event.preventDefault(); select(this) }
     });
+    c.attr('data-card', "" + card.number + " " + card.color + " " + card.shading + " " + card.shape);
     c.bind('touchstart', function(event) { event.stopPropagation(); event.preventDefault(); select(this) });
     c.append(generateShapes(card));
     cards.push(c);
