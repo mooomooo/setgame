@@ -1,6 +1,6 @@
 {
   "name": "setgame",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "Based off of the original by Vincent Woo <me@vincentwoo.com>",
   "description": "Real-time multiplayer set in the browser",
   "private": true,
@@ -14,15 +14,16 @@
     "url": "https://vincentwoo@github.com/vincentwoo/setgame.git"
   },
   "devDependencies": {
-    "uglify-js": "1.x"
+    "uglify-js"     : "3.17.x",
+    "supervisor"    : "0.12.x"
   },
   "dependencies": {
-    "serve-static"   : "1.14.x",
-    "connect"        : "1.0.x",
-    "connect-no-www" : "0.1.x",
-    "socket.io"      : "0.9.x",
-    "supervisor"     : "0.3.x"
+    "jquery"        : "3.7.x",
+    "express"       : "4.18.x",
+    "socket.io"     : "0.9.x",
+    "serve-static"  : "1.15.x",
+    "morgan"        : "1.10.x"
   },
-  "engine": "node = 0.6.x",
+  "engine": "node = 20",
   "license": "MIT"
 }

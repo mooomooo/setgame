@@ -38,7 +38,7 @@ function startGame() {
   $('#input').keydown(input);
   //$('#input').focus();
   
-  $(window).hashchange(function() {
+  $(window).on( 'hashchange', function() {
     if (preventRefresh) {
       preventRefresh = false;
       return;

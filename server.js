@@ -1,9 +1,8 @@
 var http = require('http')
-  , fs = require('fs')
+  , express = require('express')
+  , morgan = require('morgan')
   , io = require('socket.io')
   , servestatic = require('serve-static')
-  , connect = require('connect')
-  , nowww = require('connect-no-www')
   , Game = require('./game')
   , server
   , games = {}
@@ -34,19 +33,14 @@ function niceifyURL(req, res, next){
   return next();
 }
 
-server = connect.createServer(
-    connect.logger(':status :remote-addr :url in :response-timems')
-  , nowww()
-  , niceifyURL
-  , servestatic(publicDir, {
-        matchType: /text|javascript/
-      , maxAge: prod ? 86400000 : 0
-    })
-  , servestatic(publicDir + '/perm', {
-        matchType: /image|font/
-      , maxAge: prod ? 604800000 : 0
-    })
-);
+var app = express()
+            .use(morgan(':status :remote-addr :url in :response-time ms'))
+            .use(niceifyURL)
+            .use(express.static('public'))
+            .use(express.static('public/perm'))
+            .use(express.static('client'))
+            .use('/jquery', express.static(__dirname + '/node_modules/jquery/dist/'))
+server = http.createServer(app)
 
 server.listen(8000);
 
@@ -56,15 +50,6 @@ io.configure('production', function() {
   io.enable('browser client etag');          // apply etag caching logic based on version number
   io.enable('browser client gzip');          // gzip the file
   io.set('log level', 1);                    // reduce logging
-  /*
-  io.set('transports', [                     // enable all transports (optional if you want flashsocket)
-      'websocket'
-    , 'flashsocket'
-    , 'htmlfile'
-    , 'xhr-polling'
-    , 'jsonp-polling'
-  ]);
-  */
 });
 
 function getUnusedHash() {
