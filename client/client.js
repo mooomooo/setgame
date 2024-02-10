@@ -382,6 +382,7 @@ function hint(card) {
 function win(winner) {
   message = 'Player ' + (winner+ 1) + ' wins!';
   msg({event: true, msg: 'Player ' + (winner + 1) + ' has won this round'});
+  time = 29;
   newGame();
 }
 
