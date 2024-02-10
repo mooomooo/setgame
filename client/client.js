@@ -295,22 +295,21 @@ function taken(newBoard) {
       var replace = cards[card]
         , old = cards[i];
       cards[i] = replace;
-      (function (old) {
+      (function (old, replace) {
         var offsx = old.offset().left - replace.offset().left
           , offsy = old.offset().top - replace.offset().top;
         replace.css('z-index', '3');
-        replace.animate({
+        replace.css({
+            transition: "transform 1.25s",
             transform: 'translateX(' + offsx + 'px) translateY(' + offsy + 'px) rotate(360deg)'}
-          , { duration: 1250
-            , easing: 'easeOutQuad'
-            , complete: function() {
-                $(this).css('transform', 'translateX(0px) translateY(0px)');
-                old.hide();
-                old.after($(this));
-                old.remove();
-              }
-        });
-      })(old);
+        );
+        old.hide();
+        setTimeout( function() {
+            replace.css({transform: 'translateX(0px) translateY(0px)'});
+            old.after(replace);
+            old.remove();
+        }, 1250);
+      })(old, replace);
     } else if (card) {
       cards[i].empty();
       cards[i].append(generateShapes(card));
