@@ -132,7 +132,7 @@ function setCookie(name,value,days) {
     var expires = "; expires="+date.toGMTString();
   }
   else var expires = "";
-  document.cookie = name+"="+value+expires+"; path=/";
+  document.cookie = name+"="+value+expires+"; path=/; SameSite=Strict";
 }
 
 var CHARSET = ['2','3','4','6','7','9','A','C','D','E','F','G','H','J','K','L','M','N','P','Q','R',
