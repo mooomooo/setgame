@@ -1,21 +1,3 @@
-May 2016 Update
-===============
-
-Set Enterprises, Inc has been after me for a few years to take down multiplayerset.com.
-I've sort of lost the willpower to deal with them, so I've just taken down the hosted
-version of the game and redirected it to here. If you want to play with the code to see
-how it worked, go nuts. Sorry to any longtime fans. If you're in SFBA, hit me up, let's
-get coffee: me@vincentwoo.com.
-
-Addendum
---------
-
-A certain player wrote in:
-
-> Also, so there is someone that I would run into while playing set online who was really really good (the only person to beat me in years - trying not to humble brag but its true). If someone else emails you can you let them know I'm interested in staying in contact?
-
-The suspected time of play was PST. If you'd like to be put in touch (even if you're not sure if you're the particular person being asked after), please feel free to write in!
-
 nodeJS + set
 ============
 
