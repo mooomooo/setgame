@@ -6,8 +6,7 @@
   "private": true,
   "scripts": {
     "build": "node build.js",
-    "dev": "./start_dev",
-    "prod": "./start_prod"
+    "dev": "./start_dev"
   },
   "repository": {
     "type": "git",
